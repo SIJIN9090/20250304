@@ -4,6 +4,7 @@ import axios from "axios";
 import CommonTable from "../../components/common/CommonTable";
 import CustomPagination from "../../components/common/CustomPagination";
 import { AuthContext, HttpHeadersContext } from "../../context";
+import WriteGo from "../../components/button/WriteGo";
 
 function Review() {
   const [bbsList, setBbsList] = useState([]);
@@ -65,6 +66,7 @@ function Review() {
             totalCnt={totalCnt}
           />
         </PaginationBox>
+        <WriteGo />
       </ContentWrapper>
     </Container>
   );

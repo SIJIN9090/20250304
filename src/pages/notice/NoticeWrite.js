@@ -168,7 +168,7 @@ function NoticelWrite() {
             headers={headers}
             postType={postType}
           />
-          <List />
+          <List postType={postType} />
         </BottomBox>
       </ContentWrapper>
     </Container>

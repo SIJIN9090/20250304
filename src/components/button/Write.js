@@ -31,6 +31,7 @@ function Write({
       console.error("파일 업로드 오류:", err);
     }
   };
+
   // 공지사항 게시글 작성
   const createBbsForNotice = async () => {
     if (!title || !content) {
@@ -70,14 +71,14 @@ function Write({
     const req = { title, content };
 
     try {
-      const response = await axios.post("/api/admin/question", req, {
+      const response = await axios.post("/api/question", req, {
         headers,
       });
       const questionId = response.data.id;
 
       if (questionId) {
         alert("새로운 질문 게시글을 성공적으로 등록했습니다 :D");
-        navigate(`/admin/onlineCounselDetail`);
+        navigate(`/onlineCounselDetail`);
       } else {
         alert("질문 게시글 등록에 실패했습니다.");
       }
@@ -85,15 +86,22 @@ function Write({
       console.error("질문 게시글 작성 오류:", err);
     }
   };
-  const handleSubmit = () => {
-    console.log("postType 값:", postType); // 디버깅 로그 추가
-    if (postType === 1) {
-      createBbsForNotice(); // 공지사항 게시글 작성
-    } else if (postType === 2) {
-      createBbsForQuestion(); // 질문 게시글 작성
-    }
+  const postTypeHandlers = {
+    1: createBbsForNotice,
+    2: createBbsForQuestion,
+    // 3: createBbsForAnswer,
+    // 4: createBbsForArticle,
   };
 
+  // handleSubmit 함수
+  const handleSubmit = () => {
+    const handler = postTypeHandlers[postType];
+    if (handler) {
+      handler(); // 해당하는 handler 실행
+    } else {
+      console.error("지원되지 않는 postType 값입니다.");
+    }
+  };
   return (
     <Button
       onClick={handleSubmit}

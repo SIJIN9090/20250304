@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AuthContext, HttpHeadersContext } from "../../context";
 import axios from "axios";
+import List from "../../components/button/List";
 
 function ReviewWrite() {
   const { auth, setAuth } = useContext(AuthContext);
@@ -11,6 +12,7 @@ function ReviewWrite() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [postType, setPostType] = useState(3);
 
   const changeTitle = (event) => {
     setTitle(event.target.value);
@@ -39,6 +41,20 @@ function ReviewWrite() {
         alert("리뷰 작성에 실패했습니다.");
       });
   };
+
+  useEffect(() => {
+    console.log("access_token:", localStorage.getItem("access_token"));
+    // 컴포넌트가 렌더링될 때마다 localStorage의 토큰 값으로 headers를 업데이트
+    setHeaders({
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    });
+
+    // 로그인한 사용자인지 체크
+    if (!auth) {
+      alert("로그인 한 사용자만 게시글을 작성할 수 있습니다 !");
+      navigate(-1);
+    }
+  }, []);
 
   return (
     <Container>
@@ -76,9 +92,7 @@ function ReviewWrite() {
         <BottomBox>
           <div>
             <Button>등록</Button>
-            <Link to="/review">
-              <Button>취소</Button>
-            </Link>
+            <List postType={postType} />
           </div>
         </BottomBox>
       </ContentWrapper>

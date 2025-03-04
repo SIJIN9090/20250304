@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { AuthContext, HttpHeadersContext } from "../../context";
 import axios from "axios";
 import Write from "../../components/button/Write";
+import List from "../../components/button/List";
 
 //관리자 공지작성으로
 
@@ -29,32 +30,6 @@ function OnlineCounselWrite() {
     setPassword(event.target.value);
   };
 
-  const createBbs = async () => {
-    const req = {
-      title: title,
-      content: content,
-
-      // password: password,
-    };
-
-    console.log("📌 보내는 데이터:", req); // 요청 데이터 확인
-    await axios
-      .post("/api/member/question/write", req, { headers: headers })
-      .then((resp) => {
-        console.log("받는 데이터", resp.data);
-
-        const questionId = resp.data.id;
-
-        console.log("onlineCounselId:", questionId);
-        alert("새로운 게시글을 성공적으로 등록했습니다 :D");
-        navigate(`/onlineCounselDetail/${questionId}`);
-      })
-      .catch((err) => {
-        console.log("[onlineCounselWrite.js] createBbs() error :<");
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
     console.log("access_token:", localStorage.getItem("access_token"));
     // 컴포넌트가 렌더링될 때마다 localStorage의 토큰 값으로 headers를 업데이트
@@ -72,10 +47,6 @@ function OnlineCounselWrite() {
   return (
     <Container>
       <ContentWrapper>
-        <Title>
-          <h1>온라인 상담</h1>
-        </Title>
-
         <TableBox>
           <Table>
             <tbody>
@@ -110,7 +81,6 @@ function OnlineCounselWrite() {
             onChange={chsangePassword}
           />
           <div>
-            <Button onClick={createBbs}>등록</Button>
             <Write
               title={title}
               content={content}
@@ -119,9 +89,7 @@ function OnlineCounselWrite() {
               headers={headers}
               postType={postType}
             />
-            <Link to="/OnlineCounsel">
-              <Button>취소</Button>
-            </Link>
+            <List postType={postType} />
           </div>
         </BottomBox>
       </ContentWrapper>
